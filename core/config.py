@@ -32,5 +32,9 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
     )
 
+    @property
+    def sqlalchemy_url(self) -> str:
+        return f"postgresql+psycopg://{self.db.username}:{self.db.password}@{self.db.host}:{self.db.port}/{self.db.name}"
+
 
 settings = Settings()
