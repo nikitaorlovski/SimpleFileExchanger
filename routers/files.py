@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, UploadFile, Depends, HTTPException, BackgroundTasks, Query
 
 from fastapi.responses import StreamingResponse
 
@@ -7,7 +7,7 @@ from datetime import datetime, timezone, timedelta
 router = APIRouter(prefix="/api/files", tags=["Files"])
 
 @router.post("/")
-async def upload_file(file: UploadFile, expire_days: int = 7, downloads_left: int = 1, file_service: FileService = Depends(get_file_service)):
+async def upload_file(file: UploadFile, expire_days: int = Query(7, ge=1), downloads_left: int = Query(1, ge=1), file_service: FileService = Depends(get_file_service)):
     expires_at = datetime.now(timezone.utc) + timedelta(days=expire_days)
     filename = file.filename
     size = file.size
