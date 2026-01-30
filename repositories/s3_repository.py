@@ -8,12 +8,12 @@ from core.config import settings
 
 class S3Repository:
     def __init__(
-            self,
-            endpoint_url: str = settings.s3.endpoint_url,
-            access_key: str = settings.s3.access_key,
-            secret_key: str = settings.s3.secret_key,
-            region: str = settings.s3.region,
-            bucket_name: str = settings.s3.bucket_name,
+        self,
+        endpoint_url: str = settings.s3.endpoint_url,
+        access_key: str = settings.s3.access_key,
+        secret_key: str = settings.s3.secret_key,
+        region: str = settings.s3.region,
+        bucket_name: str = settings.s3.bucket_name,
     ):
         self.endpoint_url = endpoint_url
         self.access_key = access_key
@@ -57,9 +57,11 @@ class S3Repository:
                 return None
             url = await s3.generate_presigned_url(
                 ClientMethod="get_object",
-                Params={'Bucket': self.bucket_name,
-                        'Key': key,
-                        'ResponseContentDisposition': f'attachment; filename="{filename}"'},
+                Params={
+                    "Bucket": self.bucket_name,
+                    "Key": key,
+                    "ResponseContentDisposition": f'attachment; filename="{filename}"',
+                },
                 ExpiresIn=86400,
             )
             return url

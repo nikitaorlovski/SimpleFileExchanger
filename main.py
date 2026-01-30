@@ -9,6 +9,7 @@ from tasks.scheduler import create_scheduler
 
 scheduler = create_scheduler()
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await create_tables()
@@ -19,6 +20,7 @@ async def lifespan(app: FastAPI):
     scheduler.shutdown()
     print("Scheduler shutdown")
 
+
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(router=file_router)
@@ -26,4 +28,3 @@ app.include_router(router=file_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
-

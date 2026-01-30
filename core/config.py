@@ -4,6 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+
 class S3Settings(BaseModel):
     endpoint_url: str
     public_url: str
@@ -13,12 +14,14 @@ class S3Settings(BaseModel):
     bucket_name: str
     region: str = "auto"
 
+
 class DBConnection(BaseModel):
     username: str
     password: str
     name: str
     host: str
     port: str
+
 
 class Settings(BaseSettings):
     s3: S3Settings
