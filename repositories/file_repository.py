@@ -1,6 +1,6 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete, update, func
+from sqlalchemy import select, delete, update, func, or_
 from db.db import get_session
 from db.models.file import FileORM
 from datetime import datetime
@@ -40,6 +40,15 @@ class FileRepository:
         )
         await self.session.commit()
         return result.rowcount == 1
+
+    async def get_expired_files(self) -> list[FileORM]:
+        result = await self.session.execute(
+            select(FileORM).where(
+                or_(FileORM.expires_at < func.now(),
+                    FileORM.downloads_left == 0
+                    ))
+        )
+        return result.scalars().all()
 
 def get_file_repository(session: AsyncSession = Depends(get_session)):
     return FileRepository(session=session)

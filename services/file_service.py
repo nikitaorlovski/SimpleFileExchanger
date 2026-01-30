@@ -51,5 +51,8 @@ class FileService:
 
         return file, self.s3_repo.stream_file(key)
 
+    async def get_expired_files(self) -> list[FileORM]:
+        return await self.file_repo.get_expired_files()
+
 def get_file_service(repo: FileRepository = Depends(get_file_repository), repos3: S3Repository = Depends(get_s3_repo)):
     return FileService(repo=repo, repos3=repos3)
